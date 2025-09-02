@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Motofit — YMM Fitment Search for Shopify</title>
+  <meta name="description" content="Motofit: Plug-and-play Year-Make-Model (YMM) fitment search for off-road motorcycle parts — zero data maintenance required." />
+   <style>
+    :root{
+      --accent:#FFD700; /* Yellow */
+      --muted:#6b7280;
+      --bg:#ffffff;
+      --card:#fdfdfd;
+      --glass: rgba(255, 215, 0, 0.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;
+      line-height:1.5;
+      margin:0;
+      background:#fff;
+      color:#222;
+    }
+    .container{max-width:1100px;margin:36px auto;padding:24px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .logo{display:flex;gap:12px;align-items:center}
+    .logo .mark{
+      width:52px;height:52px;border-radius:10px;
+      background:var(--accent);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;color:#000;
+    }
+    nav a{color:#444;text-decoration:none;margin-left:18px;font-weight:600}
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;margin-bottom:34px}
+    .hero h1{font-size:32px;margin:0 0 12px}
+    .hero p{color:var(--muted);margin:0 0 18px}
+    .cta-row{display:flex;gap:12px}
+    .btn{background:var(--accent);color:#000;padding:12px 16px;border-radius:10px;border:none;font-weight:700;cursor:pointer}
+    .btn.ghost{background:transparent;border:1px solid var(--accent);color:#000}
+    .card{background:#fff;border:1px solid #eee;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.05);}
+    .ymm-widget label{font-size:13px;color:#444;display:block;margin-bottom:8px}
+    .ymm-widget select{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;background:#fff;color:#000}
+    .demo-result{margin-top:14px;padding:12px;border-radius:8px;background:var(--glass);color:#000}
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:30px 0}
+    .feature{padding:18px;border-radius:10px;background:#fff;border:1px solid #f3f3f3}
+    .feature h4{margin:6px 0 8px;color:#000}
+    .pricing{display:flex;gap:14px;margin:24px 0}
+    .price-card{flex:1;padding:18px;border-radius:12px;background:#fff;border:1px solid #eee}
+    footer{margin-top:40px;border-top:1px dashed #eee;padding-top:18px;color:#555;display:flex;justify-content:space-between;align-items:center}
+    @media(max-width:920px){.hero{grid-template-columns:1fr;}.features{grid-template-columns:repeat(2,1fr)}.pricing{flex-direction:column}}
+    @media(max-width:520px){.features{grid-template-columns:1fr}.logo .mark{width:44px;height:44px}.hero h1{font-size:22px}}
+    .tag{display:inline-block;padding:6px 10px;border-radius:999px;background:var(--glass);color:#000;font-weight:700;font-size:13px}
+    .steps{display:flex;gap:12px;flex-wrap:wrap}
+    .step{background:#fff;padding:12px;border-radius:10px;min-width:160px;border:1px solid #eee}
+    .mini{font-size:13px;color:#555}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <div class="mark">MF</div>
+        <div>
+          <div style="font-weight:800">Motofit</div>
+          <div class="mini">YMM fitment search for Shopify</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#demo">Demo</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <span class="tag">Built for Off‑Road Parts</span>
+        <h1>Motofit — Plug & play YMM search (Year, Make, Model)</h1>
+        <p>Let customers find parts that fit their dirt bikes instantly. Pre‑mapped vehicle fitment database for off‑road motorcycles — no CSVs, no upkeep.</p>
+        <div class="cta-row">
+          <button class="btn" onclick="openShopify()">Install on Shopify</button>
+          <button class="btn ghost" onclick="scrollTo('demo')">Try live demo</button>
+        </div>
+      </div>
+
+      <aside class="card" id="demo">
+        <h3 style="margin-top:0">Live widget — demo</h3>
+        <div class="ymm-widget">
+          <label for="year">Year</label>
+          <select id="year">
+            <option value="">Select year</option>
+            <option>2024</option>
+          </select>
+          <label for="make" style="margin-top:12px">Make</label>
+          <select id="make">
+            <option value="">Select make</option>
+            <option>Honda</option>
+            <option>KTM</option>
+          </select>
+          <label for="model" style="margin-top:12px">Model</label>
+          <select id="model">
+            <option value="">Select model</option>
+          </select>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button class="btn" onclick="findParts()">Find parts</button>
+            <button class="btn ghost" onclick="resetDemo()">Reset</button>
+          </div>
+          <div id="result" class="demo-result" style="display:none"></div>
+        </div>
+      </aside>
+    </section>
+
+    <section style="margin-top:20px">
+      <h3>🧾 Sample Search Use Cases</h3>
+      <div class="card mini">
+        <p><strong>If a customer searches for:</strong><br>
+        Year: 2024 • Make: Honda • Model: CRF250R</p>
+        <p><strong>Then the following products should appear:</strong></p>
+        <ul>
+          <li>Moose Racing Wheel Assembly - SX-1 - Complete - Front - Black Wheel/Red Hub - 21x1.6 – Honda</li>
+          <li>Axle Nut Washer M22</li>
+          <li>Factory Connection Front Fork Springs LRN-055</li>
+          <li>Cycra 5 Piece Replica Body Kit - OEM '22 Red - CRF 250R/450R 1CYC-9431-00</li>
+          <li>Factory Connection Shock Spring - Rear - Spring Rate 263 lb/in ALL-0047</li>
+        </ul>
+      </div>
+      <div class="card mini" style="margin-top:14px">
+        <p><strong>If a customer searches for:</strong><br>
+        Year: 2024 • Make: KTM • Model: 125 SX</p>
+        <p><strong>Then the following products should appear:</strong></p>
+        <ul>
+          <li>Factory Links Steering Rebuild Kit SSK-T-070</li>
+          <li>Works Connection Steering Stem Nut - Orange - KTM 24-380</li>
+          <li>Polisport Fork Guard Cover - Orange 8399300001</li>
+          <li>Acerbis X-Grip Frame Guards - OEM '16 Orange/Black - KTM 2975045229</li>
+          <li>Galfer Brake Pads Sintered FD138G1396</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="features">
+      <h2 style="margin-bottom:8px">Why Motofit?</h2>
+      <div class="features">
+        <div class="feature">
+          <h4>Pre-mapped fitments</h4>
+          <div class="mini">Thousands of verified YMM combinations for off-road models — ready to use.</div>
+        </div>
+        <div class="feature">
+          <h4>Zero maintenance</h4>
+          <div class="mini">Weekly data updates handled centrally. You sell, we keep fitments fresh.</div>
+        </div>
+        <div class="feature">
+          <h4>Seamless Shopify integration</h4>
+          <div class="mini">Install from the Shopify App Store and add the widget with one click.</div>
+        </div>
+        <div class="feature">
+          <h4>Increase conversions</h4>
+          <div class="mini">Customers find compatible parts faster — fewer returns and higher AOV.</div>
+        </div>
+        <div class="feature">
+          <h4>Filter & map</h4>
+          <div class="mini">Auto-tag products with fitment metadata for better search & collections.</div>
+        </div>
+        <div class="feature">
+          <h4>Developer friendly</h4>
+          <div class="mini">Theme snippet, Liquid variables, and a REST/GraphQL API for advanced flows.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <h2 style="margin-bottom:8px">Pricing</h2>
+      <div class="pricing">
+        <div class="price-card">
+          <h3>Starter</h3>
+          <div class="mini">Ideal for small shops</div>
+          <div style="font-size:20px;margin:12px 0;font-weight:800">Free</div>
+          <ul class="mini">
+            <li>Basic YMM access</li>
+            <li>1 storefront</li>
+            <li>Email support</li>
+          </ul>
+        </div>
+        <div class="price-card">
+          <h3>Pro</h3>
+          <div class="mini">Growing stores</div>
+          <div style="font-size:20px;margin:12px 0;font-weight:800">$29 / month</div>
+          <ul class="mini">
+            <li>Advanced mapping</li>
+            <li>Priority updates</li>
+            <li>API access</li>
+          </ul>
+        </div>
+        <div class="price-card">
+          <h3>Enterprise</h3>
+          <div class="mini">Custom integrations</div>
+          <div style="font-size:20px;margin:12px 0;font-weight:800">Contact us</div>
+          <ul class="mini">
+            <li>Bulk mapping</li>
+            <li>Dedicated support</li>
+            <li>SLAs & onboarding</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>© <strong>Motofit</strong> — built for off‑road parts</div>
+      <div style="display:flex;gap:12px;align-items:center"><a href="#" style="color:var(--muted);text-decoration:none">Privacy</a><a href="#" style="color:var(--muted);text-decoration:none">Support</a></div>
+    </footer>
+  </div>
+
+  <script>
+    const modelsByMake = {
+      'Honda': ['CRF250R','CRF450R'],
+      'KTM': ['125 SX','SX-F 450']
+    }
+
+    const makeEl = document.getElementById('make')
+    const modelEl = document.getElementById('model')
+    const yearEl = document.getElementById('year')
+    const resultEl = document.getElementById('result')
+
+    makeEl.addEventListener('change', ()=>{
+      const make = makeEl.value
+      modelEl.innerHTML = '<option value="">Select model</option>'
+      if(modelsByMake[make]){
+        modelsByMake[make].forEach(m=>{
+          const o = document.createElement('option'); o.textContent = m; modelEl.appendChild(o)
+        })
+      }
+    })
+
+    function findParts(){
+      const year = yearEl.value.trim(), make = makeEl.value.trim(), model = modelEl.value.trim()
+      if(!year||!make||!model){
+        resultEl.style.display='block'; resultEl.textContent='Select year, make and model to see demo results.'; return
+      }
+      resultEl.style.display='block';
+
+      if(year==='2024' && make==='Honda' && model==='CRF250R'){
+        resultEl.innerHTML = `<strong>Showing parts for 2024 Honda CRF250R</strong><ul style="margin-top:8px" class="mini"><li>Moose Racing Wheel Assembly - SX-1 - Complete - Front - Black Wheel/Red Hub - 21x1.6 – Honda</li><li>Axle Nut Washer M22</li><li>Factory Connection Front Fork Springs LRN-055</li><li>Cycra 5 Piece Replica Body Kit - OEM '22 Red - CRF 250R/450R 1CYC-9431-00</li><li>Factory Connection Shock Spring - Rear - Spring Rate 263 lb/in ALL-0047</li></ul>`
+      }
+      else if(year==='2024' && make==='KTM' && model==='125 SX'){
+        resultEl.innerHTML = `<strong>Showing parts for 2024 KTM 125 SX</strong><ul style="margin-top:8px" class="mini"><li>Factory Links Steering Rebuild Kit SSK-T-070</li><li>Works Connection Steering Stem Nut - Orange - KTM 24-380</li><li>Polisport Fork Guard Cover - Orange 8399300001</li><li>Acerbis X-Grip Frame Guards - OEM '16 Orange/Black - KTM 2975045229</li><li>Galfer Brake Pads Sintered FD138G1396</li></ul>`
+      }
+      else{
+        resultEl.innerHTML = `<strong>No demo products mapped</strong>`
+      }
+    }
+
+    function resetDemo(){ yearEl.value=''; makeEl.value=''; modelEl.innerHTML='<option value="">Select model</option>'; resultEl.style.display='none' }
+    function openShopify(){ window.open('https://apps.shopify.com','_blank') }
+    function scrollTo(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}) }
+  </script>
+</body>
+</html>
